@@ -1,6 +1,8 @@
 ﻿using GetApi;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +10,15 @@ namespace JsonHackerApi.UI
 {
     class MainForm
     {
-        public static async Task Run()
+
+        private readonly ILogger<MainForm> _logger;
+
+        public MainForm(ILogger<MainForm> logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task Run()
         {
             var done = false;
             while (!done)
@@ -32,28 +42,53 @@ namespace JsonHackerApi.UI
                             var input1 = Console.ReadLine();
                             int input1Int = CheckUserInput.CheckInteger(input1);
                             var names = await ApiListOperations.GetUsernames(input1Int);
-                            Console.WriteLine($"Author names with submission count of {input1Int} and above");
-                            foreach (var name in names)
+
+                            if (names.Count != 0)
                             {
-                                Console.WriteLine(name);
+                                Console.WriteLine($"Author names with submission count of {input1Int} and above");
+
+                                foreach (var name in names)
+                                {
+                                    Console.WriteLine(name);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No Author Found");
+
                             }
                         }
                         catch (FormatException ex)
                         {
+                            _logger.LogWarning(ex.Message);
                             Console.WriteLine(ex.Message);
                         }
-                        finally
+                        catch (HttpRequestException ex)
                         {
-                            Console.WriteLine("press 'Enter' key to continue");
-                            Console.ReadLine();
-                            Console.Clear();
+                            _logger.LogError(ex.StackTrace);
+                            Console.WriteLine("Error retrieving information");
                         }
+                        Console.WriteLine();
+                        Console.WriteLine("press 'Enter' key to continue");
+                        Console.ReadLine();
+                        Console.Clear();
                         break;
                     case "2":
-                        var authorName = await ApiListOperations.GetUsernameWithHighestCommentCount();
-                        Console.WriteLine($"The author with the highest comment count is {authorName}");
-                        Console.WriteLine("Press 'Enter' to continue");
-                        Console.ReadKey();
+                        try
+                        {
+                            var authorName = await ApiListOperations.GetUsernameWithHighestCommentCount();
+                            Console.WriteLine($"The author with the highest comment count is {authorName}");
+                        }
+                        catch (HttpRequestException ex)
+                        {
+
+                            _logger.LogError(ex.StackTrace);
+                            Console.WriteLine("Error retrieving information");
+
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine("press 'Enter' key to continue");
+                        Console.ReadLine();
                         Console.Clear();
                         break;
                     case "3":
@@ -63,23 +98,36 @@ namespace JsonHackerApi.UI
                             var input2 = Console.ReadLine();
                             int input2Int = CheckUserInput.CheckInteger(input2);
                             var names2 = await ApiListOperations.GetUsernamesSortedByRecordDate(input2Int);
-                            Console.WriteLine($"Author names created by {input2Int} and  above");
-                            foreach (var name2 in names2)
+                            if (names2.Count != 0)
                             {
-                                Console.WriteLine(name2);
+                                Console.WriteLine($"Author names created by {input2Int} and  above");
+                                foreach (var name2 in names2)
+                                {
+                                    Console.WriteLine(name2);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No Author found");
                             }
 
                         }
                         catch (FormatException ex)
                         {
+                            _logger.LogWarning(ex.Message);
                             Console.WriteLine(ex.Message);
                         }
-                        finally
+                        catch (HttpRequestException ex)
                         {
-                            Console.WriteLine("press 'Enter' key to continue");
-                            Console.ReadLine();
-                            Console.Clear();
+
+                            _logger.LogError(ex.StackTrace);
+                            Console.WriteLine("Error retrieving information");
+
                         }
+                        Console.WriteLine();
+                        Console.WriteLine("press 'Enter' key to continue");
+                        Console.ReadLine();
+                        Console.Clear();
                         break;
                     case "4":
                         try
@@ -108,14 +156,20 @@ namespace JsonHackerApi.UI
                         }
                         catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
                         {
+                            _logger.LogWarning(ex.Message);
                             Console.WriteLine(ex.Message);
                         }
-                        finally
+                        catch (HttpRequestException ex)
                         {
-                            Console.WriteLine("press 'Enter' key to continue");
-                            Console.ReadLine();
-                            Console.Clear();
+
+                            _logger.LogError(ex.StackTrace);
+                            Console.WriteLine("Error retrieving information");
+
                         }
+                        Console.WriteLine();
+                        Console.WriteLine("press 'Enter' key to continue");
+                        Console.ReadLine();
+                        Console.Clear();
                         break;
                     case "q":
                         Console.WriteLine("Thank you for your time, program ended");

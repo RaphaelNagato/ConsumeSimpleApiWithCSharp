@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
 
 namespace JsonHackerApi.UI
@@ -7,7 +8,10 @@ namespace JsonHackerApi.UI
     {
         static async Task Main(string[] args)
         {
-            await MainForm.Run();
+            IServiceCollection services = new ServiceCollection();
+            _ = new Init(services);
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            await serviceProvider.GetService<MainForm>().Run();
         }
     }
 }
