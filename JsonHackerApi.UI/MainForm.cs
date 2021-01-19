@@ -9,7 +9,7 @@ namespace JsonHackerApi.UI
 {
     class MainForm
     {
-        
+
         private readonly ILogger<MainForm> _logger;
 
         // logger dependency injected
@@ -133,15 +133,11 @@ namespace JsonHackerApi.UI
                     case "4":
                         try
                         {
-                            Console.WriteLine("Enter minimum value of range");
-                            var input3 = Console.ReadLine();
-                            int input3Int = CheckUserInput.CheckInteger(input3);
-                            Console.WriteLine("Enter maximum value of range");
-                            var input4 = Console.ReadLine();
-                            int input4Int = CheckUserInput.CheckInteger(input4);
                             var inputDict = new Dictionary<int, int>()
                             {
-                                    {input3Int, input4Int }
+                                    {0, 50 },
+                                    {51, 100 },
+                                    {101, 500000 },
                             };
                             // pass in the input dictionary
                             var returnDict = await ApiListOperations.GetUsernamesAccordingToRange(inputDict);
@@ -154,7 +150,10 @@ namespace JsonHackerApi.UI
                                 {
                                     Console.WriteLine(name);
                                 }
+                                Console.WriteLine();
+                                Console.WriteLine();
                             }
+
                         }
                         catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
                         {
