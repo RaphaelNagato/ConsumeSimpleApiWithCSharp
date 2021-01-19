@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GetApi
+﻿namespace GetApi
 {
+    // model of a single page
     public class PageModel
     {
         public string page { get; set; }

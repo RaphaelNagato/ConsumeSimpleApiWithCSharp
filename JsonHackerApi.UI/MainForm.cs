@@ -3,16 +3,16 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace JsonHackerApi.UI
 {
     class MainForm
     {
-
+        
         private readonly ILogger<MainForm> _logger;
 
+        // logger dependency injected
         public MainForm(ILogger<MainForm> logger)
         {
             _logger = logger;
@@ -41,6 +41,7 @@ namespace JsonHackerApi.UI
                             Console.WriteLine("Enter submission count");
                             var input1 = Console.ReadLine();
                             int input1Int = CheckUserInput.CheckInteger(input1);
+                            // get the names of authors with submission threshold and above
                             var names = await ApiListOperations.GetUsernames(input1Int);
 
                             if (names.Count != 0)
@@ -142,6 +143,7 @@ namespace JsonHackerApi.UI
                             {
                                     {input3Int, input4Int }
                             };
+                            // pass in the input dictionary
                             var returnDict = await ApiListOperations.GetUsernamesAccordingToRange(inputDict);
                             foreach (var item in returnDict)
                             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GetApi
@@ -9,12 +8,15 @@ namespace GetApi
     public class ApiListOperations
     {
 
-
+        /// <summary>
+        ///  This function would retrieve the names of the most active authors 
+        ///  (using submission count as the criteria) according to a set threshold. 
+        /// </summary>
+        /// <param name="threshold"></param>
+        /// <returns>List<string></returns>
         public static async Task<List<string>> GetUsernames(int threshold)
         {
-            /* 
-        This function would retrieve the names of the most active authors (using submission count as the criteria) according to a set threshold. 
-            */
+
 
             List<AuthorModel> ListOfAuthors = await ApiProcessor.LoadApi();
 
@@ -25,9 +27,12 @@ namespace GetApi
             return result;
         }
 
+        /// <summary>
+        /// This function would retrieve the name of the author with the highest comment count. 
+        /// </summary>
+        /// <returns>string</returns>
         public static async Task<string> GetUsernameWithHighestCommentCount()
         {
-            // This function would retrieve the name of the author with the highest comment count. 
 
             List<AuthorModel> ListOfAuthors = await ApiProcessor.LoadApi();
 
@@ -37,11 +42,14 @@ namespace GetApi
             return usernameWithHighestCommentCount;
         }
 
+        /// <summary>
+        /// This function would retrieve the names of authors sorted by when their 
+        /// record was created according to a set threshold. 
+        /// </summary>
+        /// <param name="threshold"></param>
+        /// <returns>string</returns>
         public static async Task<List<string>> GetUsernamesSortedByRecordDate(int threshold)
         {
-            /* 
-      This function would retrieve the names of authors sorted by when their record was created according to a set threshold. 
-          */
 
             List<AuthorModel> ListOfAuthors = await ApiProcessor.LoadApi();
             List<string> ListOfUsernames = ListOfAuthors.Where(author => author.created_at >= threshold)
@@ -53,11 +61,14 @@ namespace GetApi
 
         }
 
+        /// <summary>
+        /// This function would retrieve the names of authors according to articles submitted in
+        /// the range of (0 - 50, 51 - 100, 101 - Above) 
+        /// </summary>
+        /// <param name="ranges"></param>
+        /// <returns></returns>
         public static async Task<Dictionary<string, List<string>>> GetUsernamesAccordingToRange(Dictionary<int, int> ranges)
         {
-            /* 
-        This function would retrieve the names of authors according to articles submitted in the range of (0 - 50, 51 - 100, 101 - Above) 
-            */
 
             List<AuthorModel> ListOfAuthors = await ApiProcessor.LoadApi();
             var dictionaryOfUsernames = ListOfAuthors

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GetApi
 {
+    // model of the response.data
     public class AuthorModel
     {
         public int id { get; set; }
